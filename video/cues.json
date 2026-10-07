@@ -1,0 +1,57 @@
+{
+  "_note": "Single source of timing for picture and sound. 120 BPM: beat = 0.5s, bar = 2s, eighth = 0.25s.",
+  "fps": 60,
+  "duration": 30.0,
+  "bpm": 120,
+
+  "catPop": 0.4,
+  "meow1": 0.52,
+  "bubble1": 0.9,
+  "glint": 1.45,
+  "bubble2": 2.0,
+  "riser": 2.0,
+  "zoom": 3.5,
+  "drop": 4.0,
+
+  "title": 4.15,
+  "underline": 4.6,
+  "tag1": 5.0,
+  "tag2": 5.5,
+  "tag3": 6.0,
+  "subtitle": 6.5,
+  "toS3": 7.6,
+
+  "s3": 8.0,
+  "card1": 8.5,
+  "card2": 10.0,
+  "card3": 11.5,
+  "catPeek": 12.75,
+  "toS4": 13.55,
+
+  "s4": 14.0,
+  "cursorClick": 14.75,
+  "nudges": [15.0, 15.25, 15.5, 15.75, 16.0, 16.25, 16.5, 16.75],
+  "perfect": 17.0,
+  "toS5": 17.7,
+
+  "s5": 18.0,
+  "bub1": 18.5,
+  "bub2": 19.0,
+  "bub3": 19.5,
+  "reply": 20.5,
+  "sticker": 21.0,
+  "toS6": 21.7,
+
+  "climax": 22.0,
+  "s6l1": 22.25,
+  "s6l2": 22.75,
+  "runsOn": 23.25,
+  "toS7": 25.6,
+
+  "outro": 26.0,
+  "cat1": 26.15,
+  "tihai": 26.75,
+  "cat2": 27.0,
+  "sam": 28.0,
+  "meow2": 28.55
+}

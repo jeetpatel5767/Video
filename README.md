@@ -1,17 +1,45 @@
 # Jeet — "about me" video
 
-A short, funny video about Jeet (what Jeet does, the personality, the tech stack), styled exactly like the portfolio:
-**https://jeetpatel.framer.website/**
+A 30-second animated portfolio video about Jeet: what Jeet does, the personality and the tech stack. It's styled exactly like the portfolio at **https://jeetpatel.framer.website/** and hosted by the cat in sunglasses.
 
-This commit is **assets only**. The video itself comes next.
+**Watch:** [`out/jeet-patel-portfolio.mp4`](out/jeet-patel-portfolio.mp4) (1920×1080, 60 fps, H.264 + AAC 320k, −14 LUFS). [`out/contact-sheet.jpg`](out/contact-sheet.jpg) shows one frame every 0.5 s.
 
-![Style board](assets/style-board.png)
+![Contact sheet](out/contact-sheet.jpg)
 
-## Setup
+## How it's made
+
+Everything is generated from code. No stock footage, no samples, no editing app.
+
+| Part | Where | What it does |
+|---|---|---|
+| Timing | `video/cues.json` | One timeline shared by picture and sound (120 BPM: beat = 0.5 s, bar = 2 s) |
+| Animation | `video/index.html`, `style.css`, `main.js` | HTML/CSS scenes animated with one paused GSAP timeline. `window.__seek(t)` renders any instant, so every frame is reproducible |
+| Soundtrack | `audio/soundtrack.py` | Synthesised in NumPy/SciPy: tanpura drone, harmonium, bansuri with meend, dholak and tabla in kehrwa, a qawwali taali crowd, ghungroo, sub kick and bass, synced SFX, and two formant-synthesised meows. Ends with a tihai landing on sam. Mastered to −14 LUFS / −1.2 dBTP |
+| Renderer | `render/render.mjs` | Playwright drives Chromium frame by frame. Adaptive motion blur measures how far elements move during a 180° shutter and averages up to 32 sub-frames where needed |
+| Pipeline | `render/build.sh` | Soundtrack, then frames, then MP4 (BT.709), then contact sheet |
+
+### Scenes
+1. **0–4 s:** the cat introduces itself ("Let me introduce my human."), then zooms in; its silhouette opens onto Jeet's photo.
+2. **4–8 s:** the portfolio hero, recreated: "Designing pixels. Securing packets. Training models.", one phrase per beat.
+3. **8–14 s:** three expertise cards slam into Figma-style slots. The cat peeks over the last one.
+4. **14–18 s:** the perfectionist gag: a button nudged 1px, 47 revisions, "Perfect." *(it was perfect at #1)*.
+5. **18–22 s:** the group chat says "Just be a UI/UX engineer." Jeet replies "Why not both?" A **UI/UX × AI** sticker lands.
+6. **22–26 s:** "Codes to qawwali. Debugs to classical." with an equaliser driven by the actual soundtrack and the stack scrolling by (with a cat).
+7. **26–30 s:** the cat asks you to hire its human (it needs premium cat food). The end card lands on the final beat.
+
+### Build it
 
 ```bash
-./assets/fonts/get-cabinet-grotesk.sh   # heading font, see "Fonts" below
+npm install                      # GSAP, Playwright 1.56.1, pngjs
+pip install -r requirements.txt  # numpy, scipy
+bash render/build.sh             # ~10 min on 4 cores, writes out/
 ```
+
+To inspect single frames: `node render/render.mjs --stills 4.5,17.2` (after the soundtrack step has written `build/levels.json`).
+
+---
+
+# Assets
 
 ## The vibe (rules for every scene)
 
