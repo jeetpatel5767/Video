@@ -1,0 +1,176 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Jeet video — style board</title>
+<link rel="stylesheet" href="theme.css">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; width: 1600px; background: var(--lavender); color: var(--ink); font-family: var(--font-body); }
+  section { padding: 48px 64px; border-bottom: var(--border); position: relative; }
+  section.white { background: var(--white); }
+  h1 { font: 700 84px/1 var(--font-display); letter-spacing: -0.01em; margin: 18px 0 0; }
+  h2 { font: 700 40px/1.1 var(--font-display); letter-spacing: -0.01em; margin: 14px 0 24px; }
+  .underline { position: relative; display: inline-block; }
+  .underline img { position: absolute; left: 4%; bottom: -26px; width: 92%; }
+  .row { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+  .swatches { display: grid; grid-template-columns: repeat(11, 1fr); gap: 16px; }
+  .swatch span { display: block; }
+  .swatch .chip { height: 96px; border: var(--border); border-radius: var(--radius-card); }
+  .swatch b { display: block; font: 700 18px var(--font-display); margin-top: 8px; }
+  .swatch span { font: 400 14px var(--font-mono); color: #555; }
+  .hero { display: grid; grid-template-columns: 1fr 520px; gap: 40px; align-items: end; }
+  .arch { position: relative; height: 560px; background: var(--photo-lavender); border: var(--border); border-radius: 260px 260px 12px 12px; overflow: hidden; }
+  .arch img.me { position: absolute; bottom: -2px; left: 50%; transform: translateX(-50%); height: 92%; }
+  .badge { position: absolute; width: 150px; height: 150px; border-radius: 50%; background: var(--sky); border: var(--border); display: grid; place-items: center; }
+  .badge img.ring { position: absolute; inset: 0; width: 100%; height: 100%; padding: 6px; }
+  .tagline { font: 700 30px/1.35 var(--font-body); margin: 34px 0 6px; }
+  .sub { font: 400 30px/1.3 var(--font-body); margin: 0 0 30px; }
+  .type-sample { display: grid; grid-template-columns: 260px 1fr; gap: 10px 24px; align-items: baseline; }
+  .type-sample .k { font: 400 15px var(--font-mono); color: #555; }
+  .grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 14px; }
+  .tile { background: var(--white); border: var(--border); border-radius: 14px; height: 120px; display: grid; place-items: center; padding: 14px; }
+  .tile img { max-width: 100%; max-height: 76px; }
+  .logos { display: grid; grid-template-columns: repeat(16, 1fr); gap: 10px; }
+  .logos .tile { height: 78px; border-radius: 12px; padding: 16px; }
+  .logos img { width: 40px; height: 40px; }
+  .cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; }
+  .cards .card h3 { font: 700 24px var(--font-display); margin: 18px 0 6px; }
+  .cards .card p { font-size: 16px; margin: 0; line-height: 1.4; }
+  .terminal { background: var(--ink); color: var(--lavender); font: 400 26px/1.5 var(--font-mono); border-radius: var(--radius-card); padding: 26px 30px; border: var(--border); }
+  .terminal .p { color: var(--purple); }
+  .cutouts { display: flex; gap: 30px; align-items: flex-end; }
+  .cutouts img { height: 420px; }
+  .float { position: absolute; }
+</style>
+</head>
+<body>
+
+<section>
+  <div class="hero">
+    <div>
+      <div class="row" style="gap:28px">
+        <img src="images/logo-cat-sunglasses.png" style="width:86px">
+        <span style="font: 600 44px var(--font-logo)">Jeet</span>
+      </div>
+      <div style="margin-top:56px"><span class="pill"><img src="doodles/asterisk.svg" width="12">Meow meow</span></div>
+      <h1>I’m <span class="underline">Jeet Patel<img src="doodles/hand-drawn-underline.svg"></span>.</h1>
+      <p class="tagline">Designing pixels. Securing packets. Training models.</p>
+      <p class="sub">Frontend Developer • Cybersecurity • AI</p>
+      <div class="row" style="gap:28px"><span class="btn">See My Works</span><span class="btn" style="--stack-fill: var(--lavender)">Check Portfolio</span></div>
+    </div>
+    <div style="position:relative">
+      <div class="arch"><img class="me" src="images/jeet-cutout-orange-sweater.png"></div>
+      <div class="badge" style="left:-40px; top:10px"><img class="ring" src="doodles/badge-available-for-freelance-ring.svg"><img src="doodles/badge-arrow.svg" width="26"></div>
+      <img class="float" src="doodles/sparkles-pair.svg" style="right:-30px; top:-20px; width:96px">
+      <img class="float" src="doodles/waves-lines.svg" style="right:-60px; bottom:120px; width:170px">
+    </div>
+  </div>
+</section>
+
+<section class="white">
+  <span class="pill">✳ Palette</span>
+  <h2>Colours (straight from the site’s tokens)</h2>
+  <div class="swatches">
+    <div class="swatch"><div class="chip" style="background:var(--lavender)"></div><b>Lavender</b><span>#E3E3FF<br>main bg</span></div>
+    <div class="swatch"><div class="chip" style="background:var(--white)"></div><b>White</b><span>#FFFFFF<br>alt bg</span></div>
+    <div class="swatch"><div class="chip" style="background:var(--ink)"></div><b>Ink</b><span>#1D1D1D<br>text, lines</span></div>
+    <div class="swatch"><div class="chip" style="background:var(--purple)"></div><b>Purple</b><span>#7575C8<br>accent</span></div>
+    <div class="swatch"><div class="chip" style="background:var(--photo-lavender)"></div><b>Photo lilac</b><span>#C4B8E7<br>photo bg</span></div>
+    <div class="swatch"><div class="chip" style="background:var(--mint)"></div><b>Mint</b><span>#F3FFE3<br>card</span></div>
+    <div class="swatch"><div class="chip" style="background:var(--pink)"></div><b>Pink</b><span>#FDE4F9<br>card</span></div>
+    <div class="swatch"><div class="chip" style="background:var(--sky)"></div><b>Sky</b><span>#E3F2FF<br>card, pill</span></div>
+    <div class="swatch"><div class="chip" style="background:var(--peach)"></div><b>Peach</b><span>#FFEEEB<br>card</span></div>
+    <div class="swatch"><div class="chip" style="background:var(--butter)"></div><b>Butter</b><span>#FFF5C9<br>card</span></div>
+    <div class="swatch"><div class="chip" style="background:var(--grey)"></div><b>Grey</b><span>#888888<br>labels</span></div>
+  </div>
+</section>
+
+<section>
+  <span class="pill" style="background:var(--pink)">✳ Type</span>
+  <h2>Fonts</h2>
+  <div class="type-sample">
+    <span class="k">Cabinet Grotesk 700</span><span style="font: 700 56px/1.1 var(--font-display); letter-spacing:-0.01em">Breaks into systems. Legally.</span>
+    <span class="k">DM Sans 400 / 600</span><span style="font: 400 28px var(--font-body)">I analyze, break, and secure systems — <b style="font-weight:600">not “secure by hope.”</b></span>
+    <span class="k">DM Sans 900 caps</span><span style="font: 900 18px var(--font-body); letter-spacing:.05em; text-transform:uppercase">My expertise · About · Meow meow</span>
+    <span class="k">Fragment Mono</span><span style="font: 400 26px var(--font-mono)">$ whoami → jeet  # loading personality… 99%</span>
+    <span class="k">Inter 600 (logo)</span><span style="font: 600 40px var(--font-logo)">Jeet</span>
+  </div>
+</section>
+
+<section class="white">
+  <span class="pill" style="background:var(--mint)">✳ Components</span>
+  <h2>Cards, icons, terminal</h2>
+  <div class="cards">
+    <div class="card" style="background:var(--lavender)"><div class="icon-circle"><img src="icons/service-fullstack-browser.svg" width="40"></div><h3>Full-Stack</h3><p>Clean frontend, reliable backend.</p></div>
+    <div class="card" style="background:var(--mint)"><div class="icon-circle"><img src="icons/service-cybersecurity-hand-bulb.svg" width="40"></div><h3>Cybersecurity</h3><p>Analyze, break, secure.</p></div>
+    <div class="card" style="background:var(--pink)"><div class="icon-circle"><img src="icons/service-ai-puzzle.svg" width="36"></div><h3>AI & Vectors</h3><p>RAG that understands data.</p></div>
+    <div class="card" style="background:var(--sky)"><div class="icon-circle"><img src="icons/service-reverse-engineering-monitor.svg" width="42"></div><h3>Reverse Eng.</h3><p>Goes deep into internals.</p></div>
+    <div class="card" style="background:var(--peach)"><div class="icon-circle"><img src="icons/process-palette.svg" width="44"></div><h3>Design</h3><p>Figma → pixels that work.</p></div>
+  </div>
+  <div class="terminal" style="margin-top:26px"><span class="p">jeet@monk:~$</span> whoami<br>designer · hacker · model trainer · professional hackathon survivor</div>
+</section>
+
+<section>
+  <span class="pill" style="background:var(--butter)">✳ Doodles</span>
+  <h2>Hand-drawn bits (from the site, SVG)</h2>
+  <div class="grid">
+    <div class="tile"><img src="doodles/sparkles-pair.svg"></div>
+    <div class="tile"><img src="doodles/sparkles-pair-2.svg"></div>
+    <div class="tile"><img src="doodles/sparkle-burst-pink.svg"></div>
+    <div class="tile"><img src="doodles/sparkle-single.svg"></div>
+    <div class="tile"><img src="doodles/sparkle-dashed.svg"></div>
+    <div class="tile"><img src="doodles/lightning-bolt.svg"></div>
+    <div class="tile"><img src="doodles/hearts.svg"></div>
+    <div class="tile"><img src="doodles/waves-lines.svg"></div>
+    <div class="tile"><img src="doodles/waves-squiggly.svg"></div>
+    <div class="tile"><img src="doodles/curly-arrow-down.svg"></div>
+    <div class="tile"><img src="doodles/squiggle-loop.svg"></div>
+    <div class="tile"><img src="doodles/cloud-large.svg"></div>
+    <div class="tile"><img src="doodles/cloud-small.svg"></div>
+    <div class="tile"><img src="doodles/envelope.svg"></div>
+    <div class="tile"><img src="doodles/hand-drawn-underline.svg"></div>
+    <div class="tile"><img src="doodles/badge-available-for-freelance-ring.svg"></div>
+    <div class="tile"><img src="doodles/badge-10-years-experience-ring.svg"></div>
+    <div class="tile"><img src="icons/arrow-circle-right.svg" style="width:50px"></div>
+    <div class="tile"><img src="icons/button-arrow-right.svg" style="width:50px"></div>
+    <div class="tile"><img src="doodles/asterisk.svg" style="width:40px"></div>
+  </div>
+</section>
+
+<section class="white">
+  <span class="pill">✳ Tech stack</span>
+  <h2>Logos (mono = matches the outline style · colour versions also included)</h2>
+  <div class="logos">
+    <div class="tile"><img src="tech-logos/mono/python.svg"></div><div class="tile"><img src="tech-logos/mono/javascript.svg"></div>
+    <div class="tile"><img src="tech-logos/mono/go.svg"></div><div class="tile"><img src="tech-logos/mono/c.svg"></div>
+    <div class="tile"><img src="tech-logos/mono/cplusplus.svg"></div><div class="tile"><img src="tech-logos/mono/csharp.svg"></div>
+    <div class="tile"><img src="tech-logos/mono/java.svg"></div><div class="tile"><img src="tech-logos/mono/html5.svg"></div>
+    <div class="tile"><img src="tech-logos/mono/pytorch.svg"></div><div class="tile"><img src="tech-logos/mono/numpy.svg"></div>
+    <div class="tile"><img src="tech-logos/mono/pandas.svg"></div><div class="tile"><img src="tech-logos/mono/milvus.svg"></div>
+    <div class="tile"><img src="tech-logos/mono/docker.svg"></div><div class="tile"><img src="tech-logos/mono/mongodb.svg"></div>
+    <div class="tile"><img src="tech-logos/mono/mysql.svg"></div><div class="tile"><img src="tech-logos/mono/firebase.svg"></div>
+    <div class="tile"><img src="tech-logos/color/figma.svg"></div><div class="tile"><img src="tech-logos/color/framer.svg"></div>
+    <div class="tile"><img src="tech-logos/color/photoshop.svg"></div><div class="tile"><img src="tech-logos/color/illustrator.svg"></div>
+    <div class="tile"><img src="tech-logos/color/canva.svg"></div><div class="tile"><img src="tech-logos/color/postman.svg"></div>
+    <div class="tile"><img src="tech-logos/color/spring.svg"></div><div class="tile"><img src="tech-logos/color/dotnet.svg"></div>
+    <div class="tile"><img src="tech-logos/color/powershell.svg"></div><div class="tile"><img src="tech-logos/color/yarn.svg"></div>
+    <div class="tile"><img src="tech-logos/color/slack.svg"></div><div class="tile"><img src="tech-logos/color/notion.svg"></div>
+    <div class="tile"><img src="tech-logos/mono/openai.svg"></div><div class="tile"><img src="tech-logos/mono/zapier.svg"></div>
+    <div class="tile"><img src="tech-logos/mono/spotify.svg"></div><div class="tile"><img src="tech-logos/mono/adobe.svg"></div>
+  </div>
+</section>
+
+<section>
+  <span class="pill" style="background:var(--peach)">✳ You</span>
+  <h2>Cut-outs (transparent background) + logo</h2>
+  <div class="cutouts">
+    <img src="images/jeet-cutout-orange-sweater.png">
+    <img src="images/jeet-cutout-headphones.png">
+    <img src="images/logo-cat-sunglasses.png" style="height:200px">
+    <img src="doodles/hearts.svg" style="height:90px; align-self:flex-start">
+  </div>
+</section>
+
+</body>
+</html>

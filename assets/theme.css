@@ -1,0 +1,56 @@
+/* Design tokens pulled from https://jeetpatel.framer.website/ — use these in every video scene. */
+
+@font-face { font-family: "Cabinet Grotesk"; font-weight: 500; src: url("fonts/cabinet-grotesk/CabinetGrotesk-Medium.woff2") format("woff2"); }
+@font-face { font-family: "Cabinet Grotesk"; font-weight: 700; src: url("fonts/cabinet-grotesk/CabinetGrotesk-Bold.woff2") format("woff2"); }
+@font-face { font-family: "Cabinet Grotesk"; font-weight: 800; src: url("fonts/cabinet-grotesk/CabinetGrotesk-Extrabold.woff2") format("woff2"); }
+@font-face { font-family: "Cabinet Grotesk"; font-weight: 900; src: url("fonts/cabinet-grotesk/CabinetGrotesk-Black.woff2") format("woff2"); }
+@font-face { font-family: "DM Sans"; font-weight: 100 1000; src: url("fonts/DMSans-Variable.ttf") format("truetype"); }
+@font-face { font-family: "DM Sans"; font-style: italic; font-weight: 100 1000; src: url("fonts/DMSans-Italic-Variable.ttf") format("truetype"); }
+@font-face { font-family: "Fragment Mono"; font-weight: 400; src: url("fonts/FragmentMono-Regular.ttf") format("truetype"); }
+@font-face { font-family: "Inter"; font-weight: 100 900; src: url("fonts/Inter-Variable.ttf") format("truetype"); }
+
+:root {
+  /* Base */
+  --ink: #1d1d1d;          /* all text, every outline and doodle */
+  --white: #ffffff;        /* alternate section background, button face */
+  --lavender: #e3e3ff;     /* main background (Home, About, Process, Contact) */
+  --photo-lavender: #c4b8e7; /* backdrop behind Jeet in the photos / arch frame */
+  --purple: #7575c8;       /* the one accent: active nav link, hand-drawn underline */
+  --grey: #888888;         /* small labels */
+  --off-white: #f7f7f7;
+
+  /* Pastel card fills (each card / tag gets one) */
+  --mint: #f3ffe3;
+  --pink: #fde4f9;
+  --sky: #e3f2ff;
+  --peach: #ffeeeb;
+  --butter: #fff5c9;
+
+  /* Type */
+  --font-display: "Cabinet Grotesk", "DM Sans", sans-serif; /* headings, 700, tight tracking (-0.01em) */
+  --font-body: "DM Sans", sans-serif;                        /* body 400, buttons 600, tags 900 uppercase +0.05em */
+  --font-mono: "Fragment Mono", monospace;                   /* terminal / code gags */
+  --font-logo: "Inter", sans-serif;                          /* the "Jeet" wordmark, 600 */
+
+  /* Shapes */
+  --border: 2px solid var(--ink);
+  --radius-button: 10px;
+  --radius-card: 20px;
+  --radius-pill: 999px;
+  --stack-offset: 6px;     /* buttons sit on a second outlined layer peeking out underneath */
+}
+
+/* Ready-made components matching the site */
+.btn { /* sits on a second outlined layer peeking out underneath, like every button on the site */
+  display: inline-block; padding: 16px 28px;
+  font: 600 18px/1 var(--font-body); letter-spacing: -0.04em; color: var(--ink);
+  background: var(--white); border: var(--border); border-radius: var(--radius-button);
+  box-shadow: 0 var(--stack-offset) 0 -2px var(--stack-fill, var(--lavender)), 0 var(--stack-offset) 0 0 var(--ink);
+}
+.pill {
+  display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px;
+  font: 900 13px/1 var(--font-body); letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink);
+  background: var(--sky); border: var(--border); border-radius: var(--radius-pill);
+}
+.card { background: var(--lavender); border: var(--border); border-radius: var(--radius-card); padding: 28px; }
+.icon-circle { width: 74px; height: 74px; border-radius: 50%; background: var(--white); border: var(--border); display: grid; place-items: center; }
