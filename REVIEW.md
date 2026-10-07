@@ -30,6 +30,12 @@ Feedback on each version of the video. When Jeet asks for a rebuild, apply the o
 6. **Animation: more attention to detail and creativity.**
    v1 is "also perfect", but Jeet invites more craft and creative ideas.
 
+7. **Major: drop the website header in the hero scene.**
+   The nav bar (logo, Home/Services/About…, social buttons) makes the scene look like a screenshot of the website. This is a video, so the hero should feel like a cinematic scene in the portfolio's style, not a webpage.
+
+8. **Length is flexible.**
+   To fix the pacing in 3, the video may run longer than 30 s. Claude decides the new length.
+
 ### Keep as is
 - All wording outside the two items above.
 - The background music style (qawwali and classical fusion).
