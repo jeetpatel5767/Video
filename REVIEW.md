@@ -17,8 +17,8 @@ Feedback on each version of the video. When Jeet asks for a rebuild, apply the o
 3. **Pacing: give the text time to be read.**
    The speed and energy are good, but text sometimes leaves the screen while it's still being read. Hold lines longer or reduce what's on screen at once, so every line can be read comfortably.
 
-4. **Sound: add the part that touches the heart.**
-   The mix is "almost perfect, not the best". The background groove is right, but it's missing a moment that is truly emotional. Add a melodic or harmonic moment that lands emotionally.
+4. **Sound: "heart-touching" means satisfying, not emotional.**
+   Jeet clarified: this is about oddly-satisfying, ASMR-like sounds you can almost feel (water drops, crystal or glass clinks, soft clean clicks), with a warm low-frequency body (about 60–200 Hz) you feel in the chest, plus a tiny clean top layer for clarity. Not sad or emotional music.
 
 5. **Premium sound effects where the eye expects them.**
    - The cards dropping in "What I actually do" need a satisfying, clearly audible impact.
@@ -33,8 +33,11 @@ Feedback on each version of the video. When Jeet asks for a rebuild, apply the o
 7. **Major: drop the website header in the hero scene.**
    The nav bar (logo, Home/Services/About…, social buttons) makes the scene look like a screenshot of the website. This is a video, so the hero should feel like a cinematic scene in the portfolio's style, not a webpage.
 
-8. **Length is flexible.**
-   To fix the pacing in 3, the video may run longer than 30 s. Claude decides the new length.
+8. **Show the skills properly.**
+   The v1 stack marquee was good, but the skills were under-shown. Give the tech stack its own clear showcase, so a viewer can actually see which languages, skills and software Jeet knows.
+
+9. **Length is flexible.**
+   To fix the pacing in 3 and make room for 8, the video may run longer than 30 s. Claude decides the new length.
 
 ### Keep as is
 - All wording outside the two items above.
