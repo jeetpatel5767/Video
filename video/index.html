@@ -14,6 +14,7 @@
     <symbol id="smile" viewBox="0 0 40 40"><circle cx="13" cy="15" r="3" fill="#1d1d1d"/><circle cx="27" cy="15" r="3" fill="#1d1d1d"/><path d="M11 24 Q20 33 29 24" fill="none" stroke="#1d1d1d" stroke-width="3" stroke-linecap="round"/></symbol>
     <symbol id="arrow" viewBox="0 0 54 40"><path d="M4 20 H46 M30 5 L48 20 L30 35" fill="none" stroke="#1d1d1d" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="check" viewBox="0 0 120 120"><circle cx="60" cy="60" r="54" fill="#fff" stroke="#1d1d1d" stroke-width="6"/><path d="M34 62 L52 80 L88 42" fill="none" stroke="#1d1d1d" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <path id="ringpath" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"/>
   </defs>
 </svg>
 
@@ -35,22 +36,19 @@
     <div class="bubble b2"><svg class="tail" viewBox="0 0 34 40"><use href="#tail"/></svg>Let me introduce<br>my human.</div>
   </section>
 
-  <!-- 2 · hero (the portfolio, recreated) -->
+  <!-- 2 · hero, as a scene (no website header) -->
   <div id="s2o">
   <section id="s2" class="scene lav">
-    <div class="body">
-      <div class="doodle" style="left:1745px;top:30px;width:130px"><img src="../assets/doodles/sparkles-pair.svg"></div>
-      <div class="doodle waves" style="left:1690px;top:640px;width:210px"><img src="../assets/doodles/waves-lines.svg"></div>
-    </div>
+    <div class="doodle" data-bob="9,0.45,0" style="left:150px;top:70px;width:150px"><img src="../assets/doodles/cloud-large.svg"></div>
+    <div class="doodle pop-late" data-bob="10,0.5,1" style="left:1785px;top:85px;width:110px"><img src="../assets/doodles/sparkles-pair.svg"></div>
+    <div class="doodle waves" style="left:1745px;top:740px;width:170px"><img src="../assets/doodles/waves-lines.svg"></div>
     <div class="arch"><img src="../assets/images/jeet-cutout-orange-sweater.png"></div>
-    <div class="circle-badge badge"><img class="ring" src="../assets/doodles/badge-available-for-freelance-ring.svg"><img class="arrow" src="../assets/doodles/badge-arrow.svg"></div>
-    <div class="header">
-      <div class="logo"><img src="../assets/images/logo-cat-sunglasses.png">Jeet</div>
-      <div class="nav"><span>Home</span><span>Services</span><span>About</span><span>Portfolio</span><span>Process</span><span>Contact</span></div>
-      <div class="socials"><div class="stacked"><img src="../assets/icons/social-x.svg"></div><div class="stacked"><img src="../assets/icons/social-github.svg"></div><div class="stacked"><img src="../assets/icons/social-linkedin.svg"></div></div>
+    <div class="circle-badge badge">
+      <svg class="ring" viewBox="0 0 200 200"><text class="ring-text"><textPath href="#ringpath">PIXELS ✦ PACKETS ✦ MODELS ✦</textPath></text></svg>
+      <img class="arrow" src="../assets/doodles/badge-arrow.svg">
     </div>
     <div class="pill"><img src="../assets/doodles/asterisk.svg">Meow meow</div>
-    <div class="title h-display">I’m Jeet Patel.</div>
+    <div class="title h-display">I’m <span class="nm">Jeet Patel</span>.</div>
     <img class="underline" src="../assets/doodles/hand-drawn-underline.svg">
     <div class="tag tag1">Designing <span class="hl">pixels</span>.</div>
     <div class="tag tag2">Securing <span class="hl">packets</span>.</div>
@@ -76,24 +74,25 @@
     <div class="zoom-panel"></div>
   </section>
 
-  <!-- 4 · perfectionist -->
+  <!-- 4 · perfectionist: centring the cat -->
   <section id="s4" class="scene">
     <div class="grid"></div>
     <div class="pill"><img src="../assets/doodles/asterisk.svg">Also</div>
     <div class="heading h-display">A certified perfectionist.</div>
-    <div class="pill rev"><span>Revision #<span class="rev-n">39</span></span></div>
-    <div class="guide"></div>
-    <div class="measure"><div class="val"><span class="gap-n">130</span>px</div></div>
-    <div class="btn-wrap">
-      <div class="hire stacked">Hire me</div>
-      <div class="sel"><i></i><i></i><i></i><i></i><div class="dim">444 × 172</div></div>
+    <div class="pill rev"><span>Revision #<span class="rev-n">40</span></span></div>
+    <div class="guide gl"></div><div class="guide gr"></div>
+    <div class="measure ml"><div class="val"><span class="gap-l">221</span></div></div>
+    <div class="measure mr"><div class="val"><span class="gap-r">219</span></div></div>
+    <div class="obj-wrap">
+      <div class="obj stacked"><img src="../assets/images/logo-cat-sunglasses.png"><div class="file">cat.png</div></div>
+      <div class="sel"><i></i><i></i><i></i><i></i><div class="dim">360 × 300</div></div>
     </div>
     <div class="keys"><div class="key k-left stacked"><svg viewBox="0 0 54 40" style="transform:scaleX(-1)"><use href="#arrow"/></svg></div><div class="key k-right stacked"><svg viewBox="0 0 54 40"><use href="#arrow"/></svg></div></div>
-    <div class="caption">Moved this button 1px. <b>47 times.</b></div>
+    <div class="caption">Moved this cat 1px. <b>47 times.</b></div>
     <svg class="cursor" viewBox="0 0 46 64"><path d="M4 4 L4 52 L16 40 L25 60 L34 56 L25 37 L42 37 Z" fill="#1d1d1d" stroke="#fff" stroke-width="4" stroke-linejoin="round"/></svg>
     <div class="burst"></div>
     <div class="stamp stacked"><svg viewBox="0 0 120 120"><use href="#check"/></svg>Perfect.</div>
-    <div class="aside">(it was perfect at #1)</div>
+    <div class="aside">(it was centred at #1)</div>
   </section>
 
   <!-- 5 · friends -->
@@ -116,39 +115,50 @@
     <div class="sticker stacked">UI/UX × AI</div>
   </section>
 
-  <!-- 6 · qawwali, classical, stack -->
+  <!-- 6 · qawwali + classical -->
   <section id="s6" class="scene lav">
     <div class="disc"><img src="../assets/images/jeet-cutout-headphones.png"></div>
     <div class="circle-badge badge">
-      <svg class="ring" viewBox="0 0 200 200"><defs><path id="ringpath" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"/></defs>
-        <text style="font: 900 17.5px var(--font-body); letter-spacing: 3.1px; fill: #1d1d1d"><textPath href="#ringpath">ON REPEAT ✦ QAWWALI ✦ CLASSICAL ✦</textPath></text></svg>
+      <svg class="ring" viewBox="0 0 200 200"><text class="ring-text"><textPath href="#ringpath">ON REPEAT ✦ QAWWALI ✦ CLASSICAL ✦</textPath></text></svg>
       <svg class="note" viewBox="0 0 60 80"><use href="#note"/></svg>
     </div>
     <div class="notes"></div>
     <div class="eq"></div>
+    <div class="doodle" data-bob="10,0.5,1" style="left:1690px;top:170px;width:120px"><img src="../assets/doodles/sparkles-pair.svg"></div>
+    <div class="doodle" data-bob="8,0.6,3" style="left:1600px;top:800px;width:130px"><img src="../assets/doodles/hearts.svg"></div>
     <div class="pill"><img src="../assets/doodles/asterisk.svg">Off the clock</div>
     <div class="heading h-display"><div class="l1">Codes to qawwali.</div><div class="l2">Debugs to classical.</div></div>
-    <div class="runs">Runs on:</div>
-    <div class="rows"><div class="row r1"></div><div class="row r2"></div></div>
-    <div class="fact">Also: a certified <b>cat person</b>.</div>
+    <div class="fact"><span>Also: a certified <b>cat person</b>.</span><img src="../assets/images/logo-cat-sunglasses.png"></div>
   </section>
 
-  <!-- 7 · outro -->
-  <section id="s7" class="scene lav">
-    <div class="doodle d7" data-bob="10,0.6,0" style="left:150px;top:140px;width:140px"><img src="../assets/doodles/sparkles-pair.svg"></div>
-    <div class="doodle d7" data-bob="9,0.5,1" style="left:1640px;top:700px;width:140px"><img src="../assets/doodles/hearts.svg"></div>
-    <div class="doodle d7" data-bob="8,0.7,2" style="left:120px;top:780px;width:230px"><img src="../assets/doodles/waves-squiggly.svg"></div>
-    <div class="doodle d7" data-bob="12,0.45,3" style="left:1600px;top:120px;width:180px"><img src="../assets/doodles/cloud-large.svg"></div>
+  <!-- 7 · toolkit -->
+  <section id="s7" class="scene white">
+    <div class="doodle" data-bob="8,0.55,0" style="left:110px;top:60px;width:100px"><img src="../assets/doodles/sparkles-pair-2.svg"></div>
+    <div class="doodle" data-bob="9,0.5,2" style="left:1700px;top:56px;width:120px"><img src="../assets/doodles/squiggle-loop.svg"></div>
+    <div class="pill"><img src="../assets/doodles/asterisk.svg">Toolkit</div>
+    <div class="heading h-display">What I build with</div>
+    <div class="groups"></div>
+  </section>
+
+  <!-- 8 · outro -->
+  <section id="s8" class="scene lav">
+    <div class="doodle d8" data-bob="10,0.6,0" style="left:150px;top:140px;width:140px"><img src="../assets/doodles/sparkles-pair.svg"></div>
+    <div class="doodle d8" data-bob="9,0.5,1" style="left:1560px;top:810px;width:140px"><img src="../assets/doodles/hearts.svg"></div>
+    <div class="doodle d8" data-bob="8,0.7,2" style="left:120px;top:800px;width:230px"><img src="../assets/doodles/waves-squiggly.svg"></div>
+    <div class="doodle d8" data-bob="12,0.45,3" style="left:1690px;top:470px;width:160px"><img src="../assets/doodles/cloud-large.svg"></div>
     <div class="phase-a">
       <div class="cat-circle stacked"></div>
       <div class="cat-wrap"><img class="cat" src="../assets/images/logo-cat-sunglasses.png"></div>
-      <div class="bubble b1"><svg class="tail" viewBox="0 0 34 40"><use href="#tail"/></svg>Please hire<br>my human.</div>
-      <div class="bubble b2"><svg class="tail" viewBox="0 0 34 40"><use href="#tail"/></svg>I need premium<br>cat food.</div>
+      <div class="bubble b1"><svg class="tail" viewBox="0 0 34 40"><use href="#tail"/></svg>That’s my human.</div>
+      <div class="bubble b2"><svg class="tail" viewBox="0 0 34 40"><use href="#tail"/></svg>I’m head of<br>quality control.</div>
     </div>
     <div class="end">
       <div class="mini-cat stacked"><img src="../assets/images/logo-cat-sunglasses.png"></div>
-      <div class="meow-label" style="left:1060px;top:120px">meow!</div>
-      <div class="circle-badge badge"><img class="ring" src="../assets/doodles/badge-available-for-freelance-ring.svg"><img class="arrow" src="../assets/doodles/badge-arrow.svg"></div>
+      <div class="meow-label" style="left:1060px;top:118px">meow!</div>
+      <div class="circle-badge badge approved">
+        <svg class="ring" viewBox="0 0 200 200"><text class="ring-text"><textPath href="#ringpath">CAT APPROVED ✦ CAT APPROVED ✦</textPath></text></svg>
+        <svg class="tick" viewBox="0 0 120 120"><use href="#check"/></svg>
+      </div>
       <div class="name h-display"><span class="nm">Jeet Patel.</span></div>
       <img class="underline" src="../assets/doodles/hand-drawn-underline.svg">
       <div class="roles">Design <span class="dot">•</span> Security <span class="dot">•</span> AI</div>

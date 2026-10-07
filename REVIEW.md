@@ -43,3 +43,15 @@ Feedback on each version of the video. When Jeet asks for a rebuild, apply the o
 - All wording outside the two items above.
 - The background music style (qawwali and classical fusion).
 - The portfolio look: colours, fonts, doodles, the cat as host.
+
+## v2: what changed for the v1 review
+
+| v1 note | v2 |
+|---|---|
+| 1. Outro sounded like job-hunting | The cat is proud instead: "That's my human." / "I'm head of quality control." The end card gets a CAT APPROVED seal. The freelance badge is gone. |
+| 2. Replace "Hire me" | The perfectionist now centres the cat: 221 / 219 becomes 220 \| 220, "Moved this cat 1px. 47 times." |
+| 3. Text left too fast | 30 s became 46 s. Every line holds at least about 1.5 s, and cards and bubbles arrive 1–1.5 s apart. |
+| 4–5. Satisfying, audible sound | New layer with a felt low body and a clean top on every effect: water drops on text and bubbles, card thuds with a crystal tick, a premium click, keyboard thocks, smooth whooshes, a crystal chime and low bloom on "Perfect.". Effects are mixed 0 to +5 dB over the music and the music dips under impacts. |
+| 6. More craft | Slow cinematic push-in per scene, tuned water-drop arpeggios on the logos, the hero badge now reads PIXELS ✦ PACKETS ✦ MODELS, adaptive motion blur. |
+| 7. Website header | Removed. The hero is a composed scene now. |
+| 8. Skills under-shown | New toolkit scene: 26 named skills in four groups. |

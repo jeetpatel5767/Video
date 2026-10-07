@@ -24,6 +24,6 @@ ffmpeg -v error -y -i build/video.mkv -i build/soundtrack.wav \
 
 echo "4/4 contact sheet"
 ffmpeg -v error -y -i out/jeet-patel-portfolio.mp4 \
-  -vf "select='not(mod(n\,30))',scale=384:-1,drawtext=text='%{pts\:hms}':x=8:y=8:fontsize=18:fontcolor=white:box=1:boxcolor=0x1d1d1dcc:boxborderw=4,tile=6x10:padding=4:color=white" \
+  -vf "select='not(mod(n\,30))',scale=320:-1,drawtext=text='%{pts\:hms}':x=8:y=8:fontsize=18:fontcolor=white:box=1:boxcolor=0x1d1d1dcc:boxborderw=4,tile=8x12:padding=4:color=white" \
   -fps_mode passthrough -frames:v 1 out/contact-sheet.jpg
 ffprobe -v error -show_entries format=duration,size:stream=codec_name,width,height,r_frame_rate -of compact out/jeet-patel-portfolio.mp4

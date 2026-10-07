@@ -1,8 +1,8 @@
 # Jeet — "about me" video
 
-A 30-second animated portfolio video about Jeet: what Jeet does, the personality and the tech stack. It's styled exactly like the portfolio at **https://jeetpatel.framer.website/** and hosted by the cat in sunglasses.
+A 46-second animated portfolio video about Jeet: what Jeet does, the personality and the tech stack. It's styled exactly like the portfolio at **https://jeetpatel.framer.website/** and hosted by the cat in sunglasses.
 
-**Watch:** [`out/jeet-patel-portfolio.mp4`](out/jeet-patel-portfolio.mp4) (1920×1080, 60 fps, H.264 + AAC 320k, −14 LUFS). [`out/contact-sheet.jpg`](out/contact-sheet.jpg) shows one frame every 0.5 s.
+**Watch:** [`out/jeet-patel-portfolio.mp4`](out/jeet-patel-portfolio.mp4) (1920×1080, 60 fps, H.264 + AAC 320k, −14 LUFS). [`out/contact-sheet.jpg`](out/contact-sheet.jpg) shows one frame every 0.5 s. Feedback per version lives in [`REVIEW.md`](REVIEW.md).
 
 ![Contact sheet](out/contact-sheet.jpg)
 
@@ -14,25 +14,28 @@ Everything is generated from code. No stock footage, no samples, no editing app.
 |---|---|---|
 | Timing | `video/cues.json` | One timeline shared by picture and sound (120 BPM: beat = 0.5 s, bar = 2 s) |
 | Animation | `video/index.html`, `style.css`, `main.js` | HTML/CSS scenes animated with one paused GSAP timeline. `window.__seek(t)` renders any instant, so every frame is reproducible |
-| Soundtrack | `audio/soundtrack.py` | Synthesised in NumPy/SciPy: tanpura drone, harmonium, bansuri with meend, dholak and tabla in kehrwa, a qawwali taali crowd, ghungroo, sub kick and bass, synced SFX, and two formant-synthesised meows. Ends with a tihai landing on sam. Mastered to −14 LUFS / −1.2 dBTP |
+| Soundtrack | `audio/soundtrack.py` | Synthesised in NumPy/SciPy: tanpura drone, harmonium, bansuri with meend, dholak and tabla in kehrwa, a qawwali taali crowd, ghungroo, sub kick and bass, and two formant-synthesised meows. A satisfying sound-design layer gives each effect a felt low body and a clean top: water drops (tuned to the raag on the toolkit logos), crystal chimes, card thuds, a premium mouse click, keyboard thocks and smooth whooshes. Ends with a tihai landing on sam. Mastered to −14 LUFS / −1.2 dBTP |
 | Renderer | `render/render.mjs` | Playwright drives Chromium frame by frame. Adaptive motion blur measures how far elements move during a 180° shutter and averages up to 32 sub-frames where needed |
 | Pipeline | `render/build.sh` | Soundtrack, then frames, then MP4 (BT.709), then contact sheet |
 
 ### Scenes
-1. **0–4 s:** the cat introduces itself ("Let me introduce my human."), then zooms in; its silhouette opens onto Jeet's photo.
-2. **4–8 s:** the portfolio hero, recreated: "Designing pixels. Securing packets. Training models.", one phrase per beat.
-3. **8–14 s:** three expertise cards slam into Figma-style slots. The cat peeks over the last one.
-4. **14–18 s:** the perfectionist gag: a button nudged 1px, 47 revisions, "Perfect." *(it was perfect at #1)*.
-5. **18–22 s:** the group chat says "Just be a UI/UX engineer." Jeet replies "Why not both?" A **UI/UX × AI** sticker lands.
-6. **22–26 s:** "Codes to qawwali. Debugs to classical." with an equaliser driven by the actual soundtrack and the stack scrolling by (with a cat).
-7. **26–30 s:** the cat asks you to hire its human (it needs premium cat food). The end card lands on the final beat.
+1. **0–5 s:** the cat introduces itself ("Let me introduce my human."), then zooms in; its silhouette opens onto Jeet's photo.
+2. **5–11 s:** the hero as a cinematic scene: "Designing pixels. Securing packets. Training models.", one phrase at a time.
+3. **11–17 s:** three expertise cards land in Figma-style slots, each with a felt thud. The cat peeks over the last one.
+4. **17–23 s:** the perfectionist gag: centring a cat 1px at a time, 47 revisions, "Perfect." *(it was centred at #1)*.
+5. **23–29 s:** the group chat says "Just be a UI/UX engineer." Jeet replies "Why not both?" A **UI/UX × AI** sticker lands.
+6. **29–33 s:** "Codes to qawwali. Debugs to classical." with an equaliser driven by the actual soundtrack.
+7. **33–39 s:** the toolkit: 26 named skills in four groups (Languages, AI & Data, Backend, Design), each logo landing as a tuned water drop.
+8. **39–46 s:** "That's my human." "I'm head of quality control." The end card lands on the final beat, cat-approved.
+
+Every scene has a slow cinematic push-in.
 
 ### Build it
 
 ```bash
 npm install                      # GSAP, Playwright 1.56.1, pngjs
 pip install -r requirements.txt  # numpy, scipy
-bash render/build.sh             # ~10 min on 4 cores, writes out/
+bash render/build.sh             # ~15 min on 4 cores, writes out/
 ```
 
 To inspect single frames: `node render/render.mjs --stills 4.5,17.2` (after the soundtrack step has written `build/levels.json`).

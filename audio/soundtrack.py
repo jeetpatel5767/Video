@@ -474,6 +474,86 @@ def mrrp():
     )
 
 
+# ---------------------------------------------------------------- satisfying sound design
+# Each sound has a felt low body (roughly 60-200 Hz) and a short, clean top for clarity.
+def water_drop(f=1200.0, vel=1.0, body=True):
+    """Resonant 'plink': a bubble whose pitch glides up into f, with a soft low plop underneath."""
+    t = ts(0.4)
+    fr = f * (1 - 0.42 * np.exp(-t / 0.014))
+    ph = 2 * np.pi * np.cumsum(fr) / SR
+    y = np.sin(ph) * np.exp(-t / 0.085) + 0.16 * np.sin(2 * ph) * np.exp(-t / 0.035)
+    y *= np.minimum(1, t / 0.0012)
+    y += filt(rng.normal(0, 1, len(t)), "highpass", 5000) * np.exp(-t / 0.0007) * 0.22
+    if body:
+        fb = 150 + 70 * np.exp(-t / 0.012)
+        y += 0.5 * np.sin(2 * np.pi * np.cumsum(fb) / SR) * np.exp(-t / 0.032)
+    return norm(y * env_adsr(len(t), 0.0005, 0.12)) * vel
+
+
+def crystal(f=midi(86), dur=2.2, vel=1.0):
+    """Glass chime: inharmonic glass modes, a slow shimmer between twin partials, and a tiny 'tink'."""
+    t = ts(dur)
+    y = np.zeros_like(t)
+    for r, a, d in [(1.0, 1.0, 0.55), (2.32, 0.42, 0.32), (4.25, 0.22, 0.18), (6.63, 0.1, 0.1)]:
+        for det in (1.0, 1.0016):
+            y += a * 0.5 * np.sin(2 * np.pi * f * r * det * t + r) * np.exp(-t / (dur * d))
+    y += filt(rng.normal(0, 1, len(t)), "highpass", 6000) * np.exp(-t / 0.0009) * 0.3
+    return norm(y * env_adsr(len(t), 0.0008, 0.25)) * vel
+
+
+def bloom(f=midi(38), dur=1.6, vel=1.0):
+    """A felt low swell under a satisfying moment."""
+    t = ts(dur)
+    e = (1 - np.exp(-t / 0.05)) * np.exp(-t / 0.55)
+    y = (np.sin(2 * np.pi * f * t) + 0.3 * np.sin(2 * np.pi * 2 * f * t)) * e
+    return norm(np.tanh(1.2 * y) * env_adsr(len(t), 0.001, 0.2)) * vel
+
+
+def card_drop(vel=1.0):
+    """A card landing: a deep felt thump, a woody tock and a little crystal tick on contact."""
+    t = ts(0.7)
+    f = 56 + 46 * np.exp(-t / 0.028)
+    body = np.tanh(1.5 * np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-t / 0.15))
+    tock = sum(a * np.sin(2 * np.pi * fr * t + fr) * np.exp(-t / d) for fr, a, d in [(235, 0.55, 0.05), (410, 0.32, 0.032), (690, 0.16, 0.02)])
+    tick = 0.13 * np.sin(2 * np.pi * 3650 * t) * np.exp(-t / 0.045) + 0.06 * np.sin(2 * np.pi * 5480 * t) * np.exp(-t / 0.028)
+    air = filt(rng.normal(0, 1, len(t)), "lowpass", 500) * np.exp(-t / 0.02) * 0.35
+    return norm((body + tock + tick + air) * env_adsr(len(t), 0.0006, 0.1)) * vel
+
+
+def premium_click(vel=1.0):
+    """Mouse click: a crisp press and a softer release, with a little felt body."""
+    t = ts(0.16)
+    n = len(t)
+    y = np.zeros(n)
+    for off, fr, g in [(0.0, 1900, 1.0), (0.058, 2450, 0.5)]:
+        i = int(off * SR)
+        tt = t[: n - i]
+        y[i:] += g * (filt(rng.normal(0, 1, n - i), "bandpass", (2500, 9000)) * np.exp(-tt / 0.0011) * 0.8
+                      + np.sin(2 * np.pi * fr * tt) * np.exp(-tt / 0.008) * 0.5)
+    y += 0.55 * np.sin(2 * np.pi * 135 * t) * np.exp(-t / 0.022)
+    return norm(y * env_adsr(n, 0.0003, 0.03)) * vel
+
+
+def key_thock(vel=1.0, pitch=1.0):
+    """Mechanical keyboard 'thock': low-mid case resonance, a contact click and a bottom-out thud."""
+    t = ts(0.2)
+    y = sum(a * np.sin(2 * np.pi * fr * pitch * t) * np.exp(-t / d) for fr, a, d in [(330, 1.0, 0.034), (720, 0.45, 0.02), (1650, 0.18, 0.012)])
+    y += filt(rng.normal(0, 1, len(t)), "bandpass", (3000, 9000)) * np.exp(-t / 0.0014) * 0.55
+    y += 0.7 * np.sin(2 * np.pi * 105 * t) * np.exp(-t / 0.03)
+    return norm(y * env_adsr(len(t), 0.0003, 0.04)) * vel
+
+
+def premium_whoosh(dur=0.6, pan_from=-0.6, pan_to=0.6, vel=1.0):
+    """Smooth air whoosh with a soft low swell (no harsh hiss)."""
+    w = noise_sweep(dur, 260, 5200, "whoosh", pan_from=pan_from, pan_to=pan_to)
+    w = np.vstack([filt(c, "lowpass", 9000) for c in w])
+    t = ts(dur)[: w.shape[1]]
+    u = t / dur
+    sub = np.sin(2 * np.pi * np.cumsum(48 + 30 * u) / SR) * np.sin(np.pi * np.clip(u, 0, 1)) ** 2 * 0.45
+    w = w + np.vstack([sub, sub]) * 0.7
+    return w / np.max(np.abs(w)) * vel
+
+
 # ---------------------------------------------------------------- reverb
 def make_ir(length=2.4, predelay=0.018, damp=(0.9, 0.55, 0.28)):
     t = ts(length)
@@ -496,17 +576,24 @@ def reverb(bus_x, ir):
 
 # ---------------------------------------------------------------- arrangement
 C = CUES
+D = C["drop"]
 drums, claps, music, drone, bass, sfx, bells = (Bus() for _ in range(7))
-kick_times = []
-clap_times = []
-dholak_times = []
+kick_times, clap_times, dholak_times, duck_times = [], [], [], []
 
-# chords (MIDI voicings around D4) per bar start time
+# chords (MIDI voicings around D4)
 Dm = [50, 57, 62, 65, 69]
 Cmaj = [48, 55, 60, 64, 67]
 Gmaj = [43, 55, 59, 62, 67]
 Amaj = [45, 57, 61, 64, 69]
+CH = {"Dm": Dm, "C": Cmaj, "G": Gmaj, "A": Amaj}
 ROOTS = {"Dm": 38, "C": 36, "G": 43, "A": 45}
+SWARMANDAL = [62, 64, 65, 67, 69, 71, 72, 74, 76, 77, 79, 81, 83, 84, 86]
+
+
+def kafi(i, base=74):
+    """i-th note of D Kafi (Dorian) going up from `base` (a D)."""
+    return base + 12 * (i // 7) + [0, 2, 3, 5, 7, 9, 10][i % 7]
+
 
 # tanpura: Pa - Sa - Sa - low Sa, the whole piece
 t = 0.0
@@ -518,32 +605,11 @@ while t < DUR:
             drone.add(tanpura(f, int(t / 3.1) % 2), tt, gain=0.55 if i < 3 else 0.7, pan=[-0.45, 0.35, 0.5, -0.2][i])
     t += 3.1
 
-# --- INTRO 0-4: harmonium swell + bansuri aalaap, cat
-swell = harmonium_chord(Dm, 3.9)
-music.add(swell * np.linspace(0.0, 1.0, len(swell)) ** 1.5, 0.15, gain=0.33, pan=-0.1)
-# bansuri aalaap enters after the meow and resolves to Sa exactly on the drop
-music.add(flute_phrase([(0.0, 81, 0.85), (0.85, 79, 0.25), (1.1, 77, 0.25), (1.35, 76, 0.45), (1.8, 77, 0.2),
-                        (2.0, 76, 0.35), (2.35, 74, 0.7)]), C["drop"] - 3.05, gain=0.42, pan=0.12)
-sfx.add(pop(1100, 480), C["catPop"], gain=0.5)
-sfx.add(meow(), C["meow1"], gain=0.62, pan=-0.05)
-sfx.add(pop(1300, 600, 0.6), C["bubble1"], gain=0.35, pan=0.25)
-sfx.add(bell(midi(98), 0.9), C["glint"], gain=0.08, pan=0.1)
-sfx.add(pop(1400, 650, 0.6), C["bubble2"], gain=0.35, pan=0.25)
-sfx.add(noise_sweep(2.0, 250, 9000, "rise", pan_from=-0.3, pan_to=0.3), C["riser"], gain=0.3)
-# swarmandal sweep up into the drop
-scale = [62, 64, 65, 67, 69, 71, 72, 74, 76, 77, 79, 81, 83, 84, 86]
-for i, m in enumerate(scale):
-    music.add(santoor(midi(m), 2.2, 0.7), 3.45 + i * 0.026, gain=0.11, pan=-0.7 + 1.4 * i / len(scale))
-# tirakita roll accelerating into sam
-for k, tt in enumerate([3.5, 3.625, 3.75, 3.8125, 3.875, 3.9375]):
-    drums.add(dholak_treble(0.45 + 0.1 * k, open_=k % 2 == 0), tt, gain=0.5, pan=0.15)
-sfx.add(noise_sweep(0.55, 400, 5000, "whoosh"), C["zoom"] - 0.05, gain=0.32)
-
 
 # --- groove builders
-def groove_bar(t0, intensity=1.0, claps_full=False, kick_on=True):
+def groove_bar(t0, intensity=1.0, claps_full=False, kick_on=True, upto=8):
     # kehrwa: Dha Ge Na Ti | Na Ka Dhi Na
-    pat = ["dha", "ge", "na", "ti", "na", "ka", "dhi", "na"]
+    pat = ["dha", "ge", "na", "ti", "na", "ka", "dhi", "na"][:upto]
     for i, s in enumerate(pat):
         tt = hum(t0 + i * E8)
         v = intensity * (1.0 if i in (0, 6) else 0.75)
@@ -562,19 +628,20 @@ def groove_bar(t0, intensity=1.0, claps_full=False, kick_on=True):
         # ghost sixteenths for lilt
         if i in (3, 7) and intensity > 0.9:
             drums.add(dholak_treble(0.3, open_=False), hum(t0 + i * E8 + S16), gain=0.3, pan=0.25)
-    for i in range(16):
+    for i in range(2 * upto):
         acc = 1.0 if i % 4 == 0 else (0.55 if i % 2 == 0 else 0.35)
         bells.add(ghungroo(acc * min(intensity, 1.0)), hum(t0 + i * S16), gain=0.16, pan=0.45 if i % 2 else 0.25)
     if kick_on:
-        for b in (0, 2):
+        for b in [b for b in (0, 2) if 2 * b < upto]:
             kick_times.append(t0 + b * BEAT)
             drums.add(kick(intensity), t0 + b * BEAT, gain=0.72)
     hits = [0, 2, 4, 6] if claps_full else [2, 6]
-    for i in hits:
+    for i in [h for h in hits if h < upto]:
         taali(claps, t0 + i * E8, vel=1.0 if i in (2, 6) else 0.8, people=9 if claps_full else 6)
         clap_times.append(t0 + i * E8)
-    taali(claps, t0 + 7 * E8, vel=0.55, people=5)
-    clap_times.append(t0 + 7 * E8)
+    if upto == 8:
+        taali(claps, t0 + 7 * E8, vel=0.55, people=5)
+        clap_times.append(t0 + 7 * E8)
 
 
 def bass_bar(t0, root, intensity=1.0):
@@ -611,110 +678,171 @@ HOOK_B = eighths([(74, 1), (76, 1), (77, 1), (79, 1), (81, 1), (83, 1), (81, 1),
 CLIMAX = eighths([(81, 2), (86, 1), (84, 1), (83, 2), (81, 1), (79, 1),
                   (79, 1), (81, 1), (79, 1), (76, 1), (76, 1), (77, 1), (76, 1), (73, 1)])
 
-# --- DROP 1 (4-8): hero
-sfx.add(boom(), C["drop"], gain=0.55)
-for bar, (chord, root) in enumerate([(Dm, "Dm"), (Cmaj, "C")]):
-    t0 = C["drop"] + bar * 2
-    groove_bar(t0)
-    bass_bar(t0, ROOTS[root])
-    harmonium_stabs(t0, chord)
-hook(C["drop"], HOOK_A)
-sfx.add(scribble(), C["underline"], gain=0.22, pan=-0.3)
-for k, tt in enumerate([C["tag1"], C["tag2"], C["tag3"]]):
-    drums.add(tabla_na(0.9, kind="na"), tt, gain=0.28, pan=0.3)
-sfx.add(pop(1000, 500, 0.5), C["subtitle"], gain=0.25)
-sfx.add(noise_sweep(0.6, 300, 6000, "whoosh", pan_from=0.5, pan_to=-0.5), C["toS3"] - 0.05, gain=0.3)
 
-# --- 8-14: what I do
-for bar, (chord, root) in enumerate([(Gmaj, "G"), (Dm, "Dm"), (Dm, "Dm")]):
-    t0 = C["s3"] + bar * 2
-    groove_bar(t0, intensity=0.95)
-    bass_bar(t0, ROOTS[root])
-    harmonium_stabs(t0, chord, 0.7)
-hook(C["s3"], HOOK_B)
-# santoor ostinato (Sa Pa Sa' Pa ...) under the cards
+
+def section(t0, chords, hook_notes=None, intensity=1.0, claps_full=False):
+    for b, name in enumerate(chords):
+        tb = t0 + 2 * b
+        groove_bar(tb, intensity, claps_full)
+        bass_bar(tb, ROOTS[name], intensity)
+        harmonium_stabs(tb, CH[name], 0.75)
+    if hook_notes:
+        hook(t0, hook_notes)
+
+
+def answer(t0, gain=0.3):
+    """One-bar bansuri reply that falls back to Sa."""
+    music.add(flute_phrase([(0.0, 81, 0.45), (0.5, 79, 0.24), (0.75, 77, 0.24), (1.0, 76, 0.45), (1.5, 74, 0.5)]), t0, gain=gain, pan=0.15)
+
+
+def roll(t0, t1, with_bass=False):
+    for k, tt in enumerate(np.arange(t0, t1 - 1e-6, S16)):
+        drums.add(dholak_treble(0.45 + 0.1 * k, open_=k % 2 == 0), hum(tt), gain=0.42, pan=0.15)
+        if with_bass:
+            drums.add(dholak_bass(0.3 + 0.1 * k, bend=1.3), hum(tt), gain=0.3)
+
+
+def swarmandal(t0, notes, gain=0.11, step=0.026, dur=2.2):
+    for i, m in enumerate(notes):
+        music.add(santoor(midi(m), dur, 0.7), t0 + i * step, gain=gain, pan=-0.75 + 1.5 * i / len(notes))
+
+
+def whoosh(t, dur=0.6, pan_from=-0.6, pan_to=0.6, gain=0.62):
+    sfx.add(premium_whoosh(dur, pan_from, pan_to), t - 0.06, gain=gain)
+
+
+def climax_harmony(t0):
+    for chord, root, off in [(Dm, "Dm", 0.0), (Gmaj, "G", 1.0), (Cmaj, "C", 2.0), (Amaj, "A", 3.0)]:
+        for o, d in [(0, 1.5), (3, 0.8)]:
+            bass.add(bass_note(midi(ROOTS[root]), d * E8, 1.1), t0 + off + o * E8, gain=0.5)
+        music.add(harmonium_chord(chord, 0.98, 0.9), t0 + off, gain=0.2, pan=-0.2)
+
+
+# --- 1 · intro (free time): harmonium swell, bansuri aalaap that lands on Sa at the drop, the cat
+swell = harmonium_chord(Dm, D - 0.25)
+music.add(swell * np.linspace(0.0, 1.0, len(swell)) ** 1.5, 0.15, gain=0.33, pan=-0.1)
+music.add(flute_phrase([(0.0, 81, 0.85), (0.85, 79, 0.25), (1.1, 77, 0.25), (1.35, 76, 0.45), (1.8, 77, 0.2),
+                        (2.0, 76, 0.35), (2.35, 74, 1.05)]), D - 3.4, gain=0.42, pan=0.12)
+sfx.add(water_drop(midi(81)), C["catPop"], gain=0.3)
+sfx.add(meow(), C["meow1"], gain=0.36, pan=-0.05)
+sfx.add(water_drop(midi(86)), C["bubble1"], gain=0.28, pan=0.25)
+sfx.add(crystal(midi(98), 1.4), C["glint"], gain=0.09, pan=0.1)
+sfx.add(water_drop(midi(88)), C["bubble2"], gain=0.28, pan=0.25)
+sfx.add(noise_sweep(D - C["riser"], 250, 9000, "rise", pan_from=-0.3, pan_to=0.3), C["riser"], gain=0.13)
+swarmandal(D - 0.55, SWARMANDAL)
+for k, tt in enumerate([D - 0.5, D - 0.375, D - 0.25, D - 0.1875, D - 0.125, D - 0.0625]):
+    drums.add(dholak_treble(0.45 + 0.1 * k, open_=k % 2 == 0), tt, gain=0.5, pan=0.15)
+whoosh(C["zoom"] + 0.05, 0.5, -0.3, 0.3, gain=0.55)
+
+# --- 2 · hero
+sfx.add(boom(), D, gain=0.3)
+section(D, ["Dm", "C", "Dm"], HOOK_A)
+answer(D + 4)
+sfx.add(scribble(), C["underline"], gain=0.13, pan=-0.3)
+for key, m in [("tag1", 81), ("tag2", 84), ("tag3", 86)]:
+    drums.add(tabla_na(0.8, kind="na"), C[key], gain=0.18, pan=0.3)
+    sfx.add(water_drop(midi(m)), C[key], gain=0.62, pan=0.25)
+sfx.add(water_drop(midi(88), body=False), C["subtitle"], gain=0.22, pan=0.1)
+roll(C["s3"] - 0.5, C["s3"])
+whoosh(C["toS3"], 0.6, 0.5, -0.5)
+
+# --- 3 · what I do
+section(C["s3"], ["G", "Dm", "C"], HOOK_B)
+answer(C["s3"] + 4)
 ost = [62, 69, 74, 69, 65, 69, 74, 77]
-for i in range(48):
-    tt = C["s3"] + i * S16
-    if tt >= 13.5:
-        break
-    music.add(santoor(midi(ost[i % len(ost)] + 12), 0.9, 0.5), hum(tt), gain=0.07, pan=0.45 if i % 2 else -0.35)
-music.add(flute_phrase([(0.0, 81, 0.45), (0.5, 79, 0.24), (0.75, 77, 0.24), (1.0, 76, 0.45), (1.5, 74, 0.5)]), 12.0, gain=0.3, pan=0.15)
-music.add(harmonium_chord(Dm, 1.95, 0.7), 12.0, gain=0.14, pan=-0.2)
+for i, tt in enumerate(np.arange(C["s3"] + 4, C["toS4"] - 0.1, S16)):
+    music.add(santoor(midi(ost[i % len(ost)] + 12), 0.9, 0.5), hum(tt), gain=0.06, pan=0.45 if i % 2 else -0.35)
+for i in range(3):
+    sfx.add(crystal(midi(93 + 2 * i), 0.6), C["s3"] + 0.1 + 0.08 * i, gain=0.05, pan=-0.5 + 0.5 * i)
 for key in ("card1", "card2", "card3"):
-    sfx.add(thock(), C[key], gain=0.42)
-    drums.add(tabla_na(1.0, kind="ta"), C[key], gain=0.25, pan=0.2)
-sfx.add(mrrp(), C["catPeek"] + 0.12, gain=0.42, pan=0.45)
-# fill into the breakdown
-for k, tt in enumerate(np.arange(13.0, 13.5, S16)):
-    drums.add(dholak_treble(0.5 + 0.08 * k, open_=k % 2 == 0), hum(tt), gain=0.4, pan=0.15)
-sfx.add(noise_sweep(0.7, 300, 7000, "whoosh", pan_from=-0.4, pan_to=0.6), C["toS4"] - 0.05, gain=0.32)
+    sfx.add(card_drop(), C[key], gain=1.0)
+    drums.add(tabla_na(1.0, kind="ta"), C[key], gain=0.2, pan=0.2)
+    duck_times.append((C[key], 0.3))
+sfx.add(mrrp(), C["catPeek"] + 0.12, gain=0.28, pan=0.45)
+roll(C["s4"] - 0.5, C["s4"])
+whoosh(C["toS4"], 0.5, -0.4, 0.6)
 
-# --- 14-18: perfectionist breakdown (drums drop out, clock-like ticks)
-music.add(harmonium_chord(Dm, 3.0, 0.8), C["s4"], gain=0.2, pan=-0.1)
+# --- 4 · perfectionist: drums drop out; clock-like tin, premium click, keyboard thocks
+music.add(harmonium_chord(Dm, C["perfect"] - C["s4"], 0.8), C["s4"], gain=0.2, pan=-0.1)
 music.add(flute_phrase([(0.0, 74, 1.4), (1.5, 76, 0.5), (2.0, 77, 0.9)], vib_cents=20), C["s4"] + 0.05, gain=0.22, pan=0.2)
-sfx.add(mouse_click(), C["cursorClick"], gain=0.4, pan=0.2)
-for k, tt in enumerate(C["nudges"]):
-    sfx.add(tick(2350 if k % 2 == 0 else 2650), tt, gain=0.3, pan=-0.25 if k % 2 == 0 else 0.25)
-    drums.add(tabla_na(0.35, kind="tin"), tt, gain=0.2, pan=0.1)
-    sfx.add(mouse_click(0.5), tt - 0.01, gain=0.18)
-# 'perfect': swarmandal + bell over a bright G chord, resolving
-for i, m in enumerate(scale + [88, 89, 91]):
-    music.add(santoor(midi(m), 2.6, 0.7), C["perfect"] + i * 0.022, gain=0.12, pan=-0.7 + 1.4 * i / 18)
-sfx.add(bell(), C["perfect"] + 0.02, gain=0.24, pan=0.1)
-music.add(harmonium_chord(Gmaj, 0.95, 0.9), C["perfect"], gain=0.24, pan=-0.1)
-sfx.add(thock(0.8), C["perfect"], gain=0.3)
-for k, tt in enumerate(np.arange(17.5, 18.0, S16)):
-    drums.add(dholak_treble(0.45 + 0.12 * k), hum(tt), gain=0.45, pan=0.15)
-    drums.add(dholak_bass(0.3 + 0.1 * k, bend=1.3), hum(tt), gain=0.3)
-sfx.add(noise_sweep(0.6, 300, 6000, "whoosh", pan_from=0.6, pan_to=-0.6), C["toS5"] - 0.05, gain=0.3)
+for tt in np.arange(C["s4"], C["perfect"] - 0.4, BEAT):
+    drums.add(tabla_na(0.3, kind="tin"), tt, gain=0.09, pan=0.15)
+sfx.add(premium_click(), C["cursorClick"], gain=0.62, pan=0.15)
+KEY_DELTAS = [-1, -1, 1, 1, -1, -1, 1]
+for d, tt in zip(KEY_DELTAS, C["nudges"]):
+    sfx.add(key_thock(pitch=1.0 if d < 0 else 1.12), tt, gain=0.58, pan=-0.2 if d < 0 else 0.2)
+P = C["perfect"]
+swarmandal(P, SWARMANDAL + [88, 89, 91], gain=0.12, step=0.022, dur=2.6)
+sfx.add(crystal(midi(86), 2.8), P + 0.01, gain=0.22, pan=0.1)
+sfx.add(bloom(midi(38)), P, gain=0.32)
+sfx.add(card_drop(0.8), P, gain=0.42)
+duck_times.append((P, 0.35))
+music.add(harmonium_chord(Gmaj, 1.4, 0.9), P, gain=0.24, pan=-0.1)
+music.add(harmonium_chord(Dm, C["s5"] - P - 1.45, 0.7), P + 1.45, gain=0.14, pan=-0.1)
+roll(C["s5"] - 0.5, C["s5"], with_bass=True)
+whoosh(C["toS5"], 0.5, 0.6, -0.6)
 
-# --- 18-22: friends (hook returns)
-sfx.add(boom(0.6), C["s5"], gain=0.35)
-for bar, (chord, root) in enumerate([(Dm, "Dm"), (Cmaj, "C")]):
-    t0 = C["s5"] + bar * 2
-    groove_bar(t0)
-    bass_bar(t0, ROOTS[root])
-    harmonium_stabs(t0, chord)
-hook(C["s5"], HOOK_A, flute_gain=0.3)
-for k, key in enumerate(("bub1", "bub2", "bub3")):
-    sfx.add(pop(900 + 120 * k, 420 + 50 * k), C[key], gain=0.42, pan=0.3)
-sfx.add(pop(1500, 700, 1.0), C["reply"], gain=0.5, pan=0.35)
-sfx.add(pop(800, 380, 0.8), C["reply"] + 0.04, gain=0.3, pan=0.35)
-sfx.add(thock(1.0), C["sticker"], gain=0.45, pan=-0.3)
-for k, tt in enumerate(np.arange(21.5, 22.0, S16)):
+# --- 5 · friends (the hook returns)
+sfx.add(boom(0.55), C["s5"], gain=0.17)
+section(C["s5"], ["Dm", "C", "Dm"], HOOK_A)
+answer(C["s5"] + 4)
+for key, m in [("bub1", 86), ("bub2", 88), ("bub3", 89)]:
+    sfx.add(water_drop(midi(m)), C[key], gain=0.4, pan=0.3)
+sfx.add(water_drop(midi(81)), C["reply"], gain=0.4, pan=0.35)
+sfx.add(water_drop(midi(86)), C["reply"] + 0.07, gain=0.36, pan=0.35)
+sfx.add(card_drop(0.9), C["sticker"], gain=0.85, pan=-0.3)
+sfx.add(crystal(midi(93), 0.9), C["sticker"] + 0.01, gain=0.12, pan=-0.3)
+duck_times.append((C["sticker"], 0.3))
+sfx.add(noise_sweep(C["climax"] - C["sticker"] - 0.2, 200, 9000, "rise"), C["sticker"] + 0.2, gain=0.12)
+for k, tt in enumerate(np.arange(C["climax"] - 0.5, C["climax"] - 1e-6, S16)):
     drums.add(dholak_treble(0.5 + 0.1 * k, open_=True), hum(tt), gain=0.45, pan=0.15)
     if k % 2 == 0:
         taali(claps, tt, vel=0.5 + 0.1 * k, people=6)
-sfx.add(noise_sweep(1.2, 200, 9000, "rise"), 20.8, gain=0.22)
 
-# --- 22-26: qawwali climax
-sfx.add(boom(1.0), C["climax"], gain=0.55)
-CLIMAX_CHORDS = [(Dm, "Dm", 0.0), (Gmaj, "G", 1.0), (Cmaj, "C", 2.0), (Amaj, "A", 3.0)]
+# --- 6 · qawwali climax
+T6 = C["climax"]
+sfx.add(boom(1.0), T6, gain=0.3)
 for bar in range(2):
-    groove_bar(C["climax"] + bar * 2, intensity=1.1, claps_full=True)
-for chord, root, off in CLIMAX_CHORDS:
-    t0 = C["climax"] + off
-    for o, d in [(0, 1.5), (3, 0.8)]:
-        bass.add(bass_note(midi(ROOTS[root]), d * E8, 1.1), t0 + o * E8, gain=0.5)
-    music.add(harmonium_chord(chord, 0.98, 0.9), t0, gain=0.2, pan=-0.2)
-hook(C["climax"], CLIMAX, flute_gain=0.4, harm_gain=0.32)
-# santoor shimmer on the climax
+    groove_bar(T6 + 2 * bar, intensity=1.1, claps_full=True)
+climax_harmony(T6)
+hook(T6, CLIMAX, flute_gain=0.4, harm_gain=0.32)
 for i in range(32):
-    tt = C["climax"] + i * S16
-    m = [74, 81, 86, 81][i % 4]
-    music.add(santoor(midi(m), 0.8, 0.45), hum(tt), gain=0.05, pan=0.5 if i % 2 else -0.5)
-sfx.add(noise_sweep(0.55, 400, 6000, "whoosh", pan_from=-0.5, pan_to=0.5), C["toS7"] - 0.05, gain=0.28)
+    music.add(santoor(midi([74, 81, 86, 81][i % 4]), 0.8, 0.45), hum(T6 + i * S16), gain=0.05, pan=0.5 if i % 2 else -0.5)
+sfx.add(water_drop(midi(86)), C["fact"], gain=0.34, pan=0.3)
+sfx.add(water_drop(midi(93)), C["fact"] + 0.3, gain=0.3, pan=0.4)
+whoosh(C["toS7"], 0.6, -0.5, 0.5)
 
-# --- 26-30: outro with tihai landing on sam
-sfx.add(boom(0.8), C["outro"], gain=0.45)
-groove_bar(C["outro"], intensity=1.0, kick_on=True)
-bass.add(bass_note(midi(38), 0.7, 1.0), C["outro"], gain=0.5)
-music.add(harmonium_chord(Dm, 0.75, 0.9), C["outro"], gain=0.2, pan=-0.2)
-music.add(flute_phrase([(0.0, 74, 0.7)]), C["outro"], gain=0.3, pan=0.15)
-sfx.add(pop(1100, 520), C["cat1"], gain=0.35, pan=0.3)
-sfx.add(pop(1200, 560), C["cat2"], gain=0.35, pan=0.3)
-# tihai: (dha ti ta) x3 with one-sixteenth gaps; the last 'ta' lands on sam
+# --- 7 · toolkit: the climax goes round again; every logo is a water drop tuned to the raag
+T7 = C["s7"]
+for bar, full in [(0, True), (1, True), (2, False)]:
+    groove_bar(T7 + 2 * bar, intensity=1.05 if full else 1.0, claps_full=full)
+climax_harmony(T7)
+hook(T7, CLIMAX, flute_gain=0.36, harm_gain=0.3)
+bass_bar(T7 + 4, ROOTS["Dm"])
+music.add(harmonium_chord(Dm, 1.95, 0.8), T7 + 4, gain=0.18, pan=-0.2)
+music.add(flute_phrase([(0.0, 81, 0.9), (1.0, 79, 0.45), (1.5, 74, 0.5)]), T7 + 4, gain=0.3, pan=0.15)
+for g, (tg, size) in enumerate(zip(C["groups"], C["groupSizes"])):
+    sfx.add(card_drop(0.6), tg, gain=0.9, pan=-0.6 + 0.4 * g)
+    duck_times.append((tg, 0.12))
+    for i in range(size):
+        lt = tg + C["logoDelay"] + i * C["logoStep"]
+        sfx.add(water_drop(midi(kafi(i + [0, 4, 2, 4][g])), 0.9, body=i == 0), lt, gain=0.34, pan=-0.6 + 0.4 * g)
+whoosh(C["toS8"], 0.6, 0.5, -0.5)
+
+# --- 8 · outro, tihai, sam
+T8 = C["outro"]
+sfx.add(boom(0.8), T8, gain=0.25)
+sfx.add(card_drop(1.0), T8, gain=0.95)
+duck_times.append((T8, 0.3))
+groove_bar(T8)
+bass_bar(T8, ROOTS["Dm"])
+harmonium_stabs(T8, Dm)
+hook(T8, HOOK_A[:7], flute_gain=0.3, harm_gain=0.2)
+groove_bar(T8 + 2, upto=3)
+bass.add(bass_note(midi(38), 0.7, 1.0), T8 + 2, gain=0.5)
+music.add(harmonium_chord(Dm, 0.7, 0.8), T8 + 2, gain=0.18, pan=-0.2)
+sfx.add(water_drop(midi(86)), C["cat1"], gain=0.38, pan=0.3)
+sfx.add(water_drop(midi(88)), C["cat2"], gain=0.38, pan=0.3)
 tihai = []
 for p in range(3):
     for s in range(3):
@@ -728,22 +856,26 @@ for tt, s in tihai[:-1]:
     taali(claps, tt, vel=0.8 * v, people=7)
     clap_times.append(tt)
     dholak_times.append(tt)
-# SAM: everything lands together
 sam = C["sam"]
-sfx.add(boom(1.1), sam, gain=0.6)
+sfx.add(boom(1.1), sam, gain=0.32)
 drums.add(kick(1.2), sam, gain=0.9)
 kick_times.append(sam)
 drums.add(dholak_bass(1.2, bend=1.15), sam, gain=0.6)
 drums.add(dholak_treble(1.2), sam, gain=0.5)
 taali(claps, sam, vel=1.2, people=9)
 clap_times.append(sam)
-final = harmonium_chord([38, 50, 57, 62, 65, 69, 74], 2.0, 1.0)
+final = harmonium_chord([38, 50, 57, 62, 65, 69, 74], 2.6, 1.0)
 music.add(final * np.linspace(1, 0.0, len(final)) ** 0.6, sam, gain=0.3, pan=-0.1)
 bass.add(bass_note(midi(38), 1.6, 1.1), sam, gain=0.55)
-music.add(flute_phrase([(0.0, 81, 0.25), (0.25, 79, 0.25), (0.5, 74, 1.4)], vib_cents=22), sam + 0.02, gain=0.36, pan=0.15)
-for i, m in enumerate(scale + [88, 89, 91, 93]):
-    music.add(santoor(midi(m), 2.8, 0.6), sam + 0.03 + i * 0.024, gain=0.1, pan=-0.75 + 1.5 * i / 19)
-sfx.add(meow(1.06), C["meow2"], gain=0.55, pan=-0.1)
+music.add(flute_phrase([(0.0, 81, 0.25), (0.25, 79, 0.25), (0.5, 74, 1.6)], vib_cents=22), sam + 0.02, gain=0.36, pan=0.15)
+swarmandal(sam + 0.03, SWARMANDAL + [88, 89, 91, 93], gain=0.1, step=0.024, dur=2.8)
+sfx.add(crystal(midi(86), 3.0), sam + 0.02, gain=0.16, pan=-0.1)
+sfx.add(bloom(midi(38), 2.0), sam, gain=0.24)
+sfx.add(crystal(midi(98), 1.2), sam + 0.65, gain=0.12, pan=0.4)
+sfx.add(water_drop(midi(93)), sam + 0.65, gain=0.26, pan=0.4)
+for k, m in enumerate([86, 89]):
+    sfx.add(water_drop(midi(m), body=False), sam + 0.8 + 0.08 * k, gain=0.2, pan=-0.1 + 0.2 * k)
+sfx.add(meow(1.06), C["meow2"], gain=0.34, pan=-0.1)
 
 # ---------------------------------------------------------------- mix
 sc = np.ones(N)                                      # sidechain from the kick
@@ -757,13 +889,25 @@ drone.x *= 0.5 + 0.5 * sc
 
 # rest the sub during the breakdown
 gate = np.ones(N)
-gate[int(14.0 * SR):int(17.5 * SR)] = 0.0
+gate[int(C["s4"] * SR):int((C["s5"] - 0.5) * SR)] = 0.0
 bass.x *= gate
+
+# let the big sound effects through: the music dips briefly under them
+duck = np.ones(N)
+for td, depth in duck_times:
+    i = int(td * SR)
+    k = np.arange(N - i) / SR
+    duck[i:] *= 1 - depth * np.exp(-k / 0.18)
+music.x *= duck
+drone.x *= duck
+bells.x *= duck
+drums.x *= 1 - 0.5 * (1 - duck)
+claps.x *= 1 - 0.5 * (1 - duck)
 
 hall = make_ir(2.6, 0.022)
 room = make_ir(0.7, 0.008, damp=(0.25, 0.16, 0.08))
 mix = (
-    drums.x * 0.9 + claps.x * 3.4 + music.x * 1.25 + drone.x * 0.32 + bass.x * 0.75 + sfx.x * 1.0 + bells.x * 1.0
+    drums.x * 0.9 + claps.x * 3.4 + music.x * 1.25 + drone.x * 0.32 + bass.x * 0.75 + sfx.x * 2.0 + bells.x * 1.0
 )
 wet = reverb(music.x * 0.55 + drone.x * 0.25 + sfx.x * 0.3 + bells.x * 0.3, hall) * 0.32 + reverb(claps.x * 3.0 + drums.x * 0.4, room) * 0.2
 mix = mix + wet
